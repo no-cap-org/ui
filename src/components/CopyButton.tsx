@@ -14,6 +14,7 @@ export default function CopyLinkButton({ link }: PropsI ) {
   return (
     <>
       <Button
+        className="cursor-pointer"
         variant="link"
         onClick={() => {
           setIsCopied(true);
