@@ -1,7 +1,7 @@
 import { API } from "@/api";
 import { useSession } from "@/providers/SessionProvider";
 import { toast } from "sonner";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CreateGroupPopup } from "./CreateGroupPopup";
 import { GroupTable, GroupTableSkeleton } from "./group-view/GroupTable";
 import { motion, AnimatePresence } from "framer-motion";
@@ -69,9 +69,9 @@ export default function GroupDashboard() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="overflow-x-auto w-full"
         >
-          <Suspense fallback={<GroupTableSkeleton/>} >
-            <GroupTable data={groups} onRefresh={fetchGroups} />
-          </Suspense>
+        
+          <GroupTable data={groups} onRefresh={fetchGroups} /> 
+          
         </motion.div>
       </AnimatePresence>
     </motion.div>

@@ -56,7 +56,7 @@ export function CreateGroupPopup({ onGroupCreated }: { onGroupCreated: () => voi
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">Create</Button>
+        <Button className="hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer" variant="outline">Create</Button>
       </PopoverTrigger>
       <PopoverContent className="bg-white">
         <motion.div

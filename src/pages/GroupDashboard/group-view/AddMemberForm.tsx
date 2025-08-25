@@ -5,7 +5,7 @@ import { API } from "@/api";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Check, Loader2Icon, PlusSquare, UserCheck, UserRoundCheck, UserRoundPlus, UserRoundSearchIcon, UserRoundX } from "lucide-react";
+import { PlusSquare,  UserRoundCheck, UserRoundPlus, UserRoundSearchIcon, UserRoundX } from "lucide-react";
 
 enum QueryState {
   ADD,
@@ -50,8 +50,9 @@ export function AddMemberButton({ groupId, onSuccess }: { groupId: string; onSuc
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <PlusSquare/>
+        <Button className="hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer" variant="ghost" size="sm">
+          <span className="md:hidden underline">Add Member</span>
+          <PlusSquare className="hidden md:block"/>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="bg-white w-72 p-2">

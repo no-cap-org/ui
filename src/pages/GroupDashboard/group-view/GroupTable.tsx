@@ -13,9 +13,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { API } from "@/api";
 import { toast } from "sonner";
 import { useState } from "react";
-import { AddMemberForm } from "./AddMemberForm";
+import { AddMemberButton } from "./AddMemberForm";
 import { useNavigate } from "react-router";
 import { Skeleton } from "@/components/ui/skeleton";
+import CopyLinkButton from "@/components/CopyButton";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 
 const fadeInUp = {
@@ -118,11 +120,12 @@ function GroupRow({
 
   return (
     <motion.tr
+
       variants={fadeInUp}
       initial="hidden"
       animate="visible"
       custom={index}
-      className="transition-all"
+      className="transition-all w-full bg-gradient-to-b from-white/20 via-white/25 to-white/30 backdrop-blur-md shadow-md"
     >
       <TableCell
         className="font-medium cursor-pointer hover:scale-[1.02] transition-transform"
@@ -178,16 +181,10 @@ function GroupRow({
         )}
       </TableCell>
       <TableCell>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="secondary" size="sm">
-              +
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="bg-white w-72 p-2">
-            <AddMemberForm groupId={group._id} onSuccess={onRefresh} />
-          </PopoverContent>
-        </Popover>
+        <AddMemberButton groupId={group._id} onSuccess={onRefresh} />
+      </TableCell>
+      <TableCell>
+        <CopyLinkButton link={`${window.location.origin}/groups/${group._id}`} />
       </TableCell>
     </motion.tr>
   );
@@ -203,10 +200,29 @@ function GroupCard({
   index: number;
 }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const handleGroupTabClick = () => {
-    navigate(`/groups/${group._id}`);
+  const handleRemoveMember = async (memberId: string) => {
+    setLoading(true);
+    try {
+      await API.METHODS.DELETE(
+        API.ENDPOINTS.group.remove(group._id, memberId),
+        {},
+        { withCredentials: true },
+        {
+          onSuccess: (response) => toast.success(response.message),
+          onError: (response) => toast.error(response.message),
+        }
+      );
+      onRefresh();
+    } catch {
+      console.error("Failed to remove member");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleGroupTabClick = () => navigate(`/groups/${group._id}`);
 
   return (
     <motion.div
@@ -215,71 +231,80 @@ function GroupCard({
       initial="hidden"
       animate="visible"
       custom={index}
-      className="border rounded-xl p-4 shadow-lg"
     >
-      <div
-        className="font-semibold text-lg cursor-pointer hover:text-primary"
-        onClick={handleGroupTabClick}
-      >
-        {group.name}
-      </div>
-      <p className="text-sm text-gray-600">{group.description}</p>
-      <div className="mt-2 text-sm">
-        <strong>Status:</strong> {group.status}
-      </div>
-      <div className="mt-2">
-        <OwnerPopover owner={group.ownerDetails} />
-      </div>
+      <Card className="rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer bg-gradient-to-b from-white/40 via-white/50 to-orange-100/35 ">
+        {/* Header: Name + Description */}
+        <CardHeader onClick={handleGroupTabClick}>
+          <CardTitle className="text-lg font-semibold hover:text-primary">
+            {group.name}
+          </CardTitle>
+          <CardDescription className="line-clamp-2">
+            {group.description || "No description provided"}
+          </CardDescription>
+          <p className="text-xs mt-1 text-muted-foreground">
+            Status: <span className="font-medium">{group.status}</span>
+          </p>
+        </CardHeader>
 
-      {/* Members */}
-      <div className="mt-3">
-        {group.memberDetails.length > 0 ? (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline" size="sm">
-                {group.memberDetails.length} Member
-                {group.memberDetails.length > 1 ? "s" : ""}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="bg-white w-72 max-h-64 overflow-auto">
-              <div className="text-sm space-y-2">
-                {group.memberDetails.map((member: any, index: number) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.03 }}
-                    className="flex items-center justify-between"
-                  >
-                    <div>
-                      <strong>
-                        {member.firstName} {member.lastName}
-                      </strong>
-                      <div className="text-xs text-gray-500">{member.email}</div>
-                    </div>
-                  </motion.li>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
-        ) : (
-          <span className="text-sm text-muted-foreground">No Members</span>
-        )}
-      </div>
+        {/* Content: Owner + Members */}
+        <CardContent className="space-y-3">
+          {/* Owner */}
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">Owner</p>
+            <OwnerPopover owner={group.ownerDetails} />
+          </div>
 
-      {/* Actions */}
-      <div className="mt-3 flex space-x-2">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button className="cursor-pointer" variant="link" size="sm">
-              Add new member
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="bg-white w-72 p-2">
-            <AddMemberForm groupId={group._id} onSuccess={onRefresh} />
-          </PopoverContent>
-        </Popover>
-      </div>
+          {/* Members */}
+          <div>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Members</p>
+            {group.memberDetails.length > 0 ? (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    {group.memberDetails.length} Member
+                    {group.memberDetails.length > 1 ? "s" : ""}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="bg-white w-72 max-h-64 overflow-auto">
+                  <ul className="text-sm space-y-2">
+                    {group.memberDetails.map((member: any, idx: number) => (
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.03 }}
+                        className="flex items-center justify-between"
+                      >
+                        <div>
+                          <strong>
+                            {member.firstName} {member.lastName}
+                          </strong>
+                          <div className="text-xs text-gray-500">{member.email}</div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRemoveMember(member._id)}
+                          disabled={loading}
+                        >
+                          ✕
+                        </Button>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </PopoverContent>
+              </Popover>
+            ) : (
+              <span className="text-sm text-muted-foreground">No Members</span>
+            )}
+          </div>
+        </CardContent>
+
+        {/* Footer: Actions */}
+        <CardFooter className="flex justify-end">
+          <AddMemberButton groupId={group._id} onSuccess={onRefresh} />
+        </CardFooter>
+      </Card>
     </motion.div>
   );
 }
@@ -289,29 +314,13 @@ export function GroupTableSkeleton() {
     <div className="w-full">
       {/* Table skeleton for desktop */}
       <div className="hidden md:block">
-        <Table>
+        <Table className="flex flex-col gap-y-2">
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-[120px]">Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Owner</TableHead>
-              <TableHead>Members</TableHead>
-              <TableHead>Add</TableHead>
-              <TableHead>Link</TableHead>
-            </TableRow>
+            <Skeleton className="h-20 w-full bg-white/30  backdrop-blur-md shadow-md " />
           </TableHeader>
-          <TableBody>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <TableRow key={i}>
-                <TableCell><Skeleton className="h-6 w-24" /></TableCell>
-                <TableCell><Skeleton className="h-6 w-48" /></TableCell>
-                <TableCell><Skeleton className="h-6 w-20" /></TableCell>
-                <TableCell><Skeleton className="h-6 w-28" /></TableCell>
-                <TableCell><Skeleton className="h-6 w-12" /></TableCell>
-                <TableCell><Skeleton className="h-6 w-10" /></TableCell>
-                <TableCell><Skeleton className="h-6 w-16" /></TableCell>
-              </TableRow>
+          <TableBody className="flex flex-col gap-y-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton className="h-20 w-full bg-white/30  backdrop-blur-md shadow-md" />
             ))}
           </TableBody>
         </Table>
