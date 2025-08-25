@@ -79,7 +79,7 @@ export default function Header() {
               <img src={LoadingStickMan} className="size-12" />
             ) : isSessionActive ? (
               <Button
-                className="text-black"
+                className="text-black hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer"
                 variant="outline"
                 onClick={logoutUser}
               >
@@ -87,10 +87,17 @@ export default function Header() {
               </Button>
             ) : (
               <>
-                <Button asChild variant="outline">
+                <Button 
+                  asChild
+                  className="text-black hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer"  
+                  variant="outline"
+                >
                   <Link to="/sign-up">Sign Up</Link>
                 </Button>
-                <Button asChild variant="outline">
+                <Button 
+                  asChild 
+                  className="text-black hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer" 
+                  variant="outline">
                   <Link to="/login">Login</Link>
                 </Button>
               </>
@@ -137,7 +144,7 @@ export default function Header() {
               ) : isSessionActive ? (
                 <Button
                   variant="outline"
-                  className="text-black"
+                  className="text-black hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer"
                   onClick={() => {
                     logoutUser();
                     setMobileMenuOpen(false);
@@ -151,7 +158,7 @@ export default function Header() {
 
                     <Button
                       variant="outline"
-                      className="text-foreground grow hover:text-primary"
+                      className="text-foreground grow hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer"
                       onClick={() => {
                         navigate("/sign-up")
                         setMobileMenuOpen(false)
@@ -161,7 +168,7 @@ export default function Header() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="text-foreground grow hover:text-primary"
+                      className="text-foreground grow hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer"
                       onClick={() => {
                         navigate("/login")
                         setMobileMenuOpen(false)
