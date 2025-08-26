@@ -44,8 +44,8 @@ export function GroupTable({
     <div className="w-full">
       {/* Table for desktop */}
       <div className="hidden md:block">
-        <Table>
-          <TableHeader>
+        <Table className="text-lg">
+          <TableHeader className="text-sm">
             <TableRow>
               <TableHead className="w-[120px]">Name</TableHead>
               <TableHead>Description</TableHead>
@@ -120,12 +120,11 @@ function GroupRow({
 
   return (
     <motion.tr
-
       variants={fadeInUp}
       initial="hidden"
       animate="visible"
       custom={index}
-      className="transition-all w-full bg-gradient-to-b from-white/20 via-white/25 to-white/30 backdrop-blur-md shadow-md"
+      className="transition-all w-full bg-gradient-to-br from-white/65 via-white/75 to-white backdrop-blur-md shadow-md"
     >
       <TableCell
         className="font-medium cursor-pointer hover:scale-[1.02] transition-transform"
@@ -232,7 +231,7 @@ function GroupCard({
       animate="visible"
       custom={index}
     >
-      <Card className="rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer bg-gradient-to-b from-white/40 via-white/50 to-orange-100/35 ">
+      <Card className="rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer bg-gradient-to-br from-white/65 via-white/75 to-white ">
         {/* Header: Name + Description */}
         <CardHeader onClick={handleGroupTabClick}>
           <CardTitle className="text-lg font-semibold hover:text-primary">

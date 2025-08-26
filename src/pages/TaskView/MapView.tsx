@@ -28,7 +28,7 @@ const userIcon = new L.Icon({
 });
 
 
-export default function GeocodingMapView({ assignment,tasks, onTaskAddedOrUpdated }: Props) {
+export default function GeocodingMapView({ assignment, tasks, onTaskAddedOrUpdated }: Props) {
   const [showAddedTasks, setShowAddedTasks] = useState<boolean>(false);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState<
@@ -110,8 +110,10 @@ export default function GeocodingMapView({ assignment,tasks, onTaskAddedOrUpdate
     }
   };
 
+  if (!userLocation) return <p>Loading map...</p>;
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 ">
       <div className="flex gap-2">
         <input
           className="border px-2 py-1 w-full rounded"

@@ -91,7 +91,7 @@ export default function ProfilePage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <Card className="shadow-2xl border-0 rounded-2xl bg-white bg-gradient-to-br from-white/65 via-white/75 to-white">
+        <Card className="shadow-2xl border-0 rounded-2xl bg-gradient-to-br from-white/65 via-white/75 to-white">
           <CardHeader>
             <CardTitle className="text-center text-3xl font-bold">My Profile</CardTitle>
             <CardDescription className="text-center">View and edit your profile details</CardDescription>
@@ -161,51 +161,52 @@ export default function ProfilePage() {
                       </FormItem>
                     )}
                   />
+                
+
+                  <FormField
+                    control={form.control}
+                    name="dob"
+                    render={({ field }) => (
+                      <FormItem className="w-fit">
+                        <FormLabel>Date of Birth</FormLabel>
+                        {isEditing ? (
+                          <FormControl>
+                            <DatePicker
+                              
+                              value={field.value}
+                              onDateSelect={(date) => field.onChange(date)}
+                            />
+                          </FormControl>
+                        ) : (
+                          <p className="text-muted-foreground rounded-md py-2">
+                            {field.value?.toLocaleDateString()}
+                          </p>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="phoneNo"
+                    render={({ field }) => (
+                      <FormItem className="w-fit">
+                        <FormLabel>Phone Number</FormLabel>
+                        {isEditing ? (
+                          <FormControl>
+                            <Input placeholder="1234567890" {...field} />
+                          </FormControl>
+                        ) : (
+                          <p className="text-muted-foreground rounded-md py-2">
+                            {field.value}
+                          </p>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-
-                <FormField
-                  control={form.control}
-                  name="dob"
-                  render={({ field }) => (
-                    <FormItem className="w-fit">
-                      <FormLabel>Date of Birth</FormLabel>
-                      {isEditing ? (
-                        <FormControl>
-                          <DatePicker
-                            
-                            value={field.value}
-                            onDateSelect={(date) => field.onChange(date)}
-                          />
-                        </FormControl>
-                      ) : (
-                        <p className="text-muted-foreground rounded-md py-2">
-                          {field.value?.toLocaleDateString()}
-                        </p>
-                      )}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="phoneNo"
-                  render={({ field }) => (
-                    <FormItem className="w-fit">
-                      <FormLabel>Phone Number</FormLabel>
-                      {isEditing ? (
-                        <FormControl>
-                          <Input placeholder="1234567890" {...field} />
-                        </FormControl>
-                      ) : (
-                        <p className="text-muted-foreground rounded-md py-2">
-                          {field.value}
-                        </p>
-                      )}
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 <div className="flex justify-end gap-3 pt-4">
                   {isEditing ? (

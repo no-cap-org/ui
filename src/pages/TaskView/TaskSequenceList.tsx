@@ -28,28 +28,25 @@ function TaskSequenceItem({ task, index }: Props) {
   const getStatusIcon = () => {
     switch (task.status) {
       case "FINISHED":
-        return <CheckCircle2 className="text-green-500" size={20} />
+        return <CheckCircle2 color="green" size={30} />
       case "ACTIVE":
       default:
-        return <Circle className="text-gray-400" size={20} />
+        return <Circle className="text-gray-400" size={30} />
     }
   }
 
   return (
     <div className="flex items-start space-x-4 py-2">
       <div className="flex flex-col items-center">
-        <Badge variant="outline" className="rounded-full px-2 py-1">{index + 1}</Badge>
+        <Badge variant="outline" className="rounded-full px-2 py-0 text-lg border-2">{index + 1}</Badge>
         <div className="h-full border-l border-gray-300 dark:border-gray-600 mt-1" />
       </div>
       <div className="flex-1">
         <div className="flex items-center justify-between">
-          <h3 className="font-medium text-sm">{task.name}</h3>
+          <h3 className="font-medium text-lg">{task.name}</h3>
           {getStatusIcon()}
         </div>
-        <p className="text-xs text-muted-foreground">{task.description}</p>
-        <p className="text-xs text-muted-foreground">
-          Location: {task.latitude.toFixed(4)}, {task.longitude.toFixed(4)}
-        </p>
+        <p className="text-lg text-muted-foreground">{task.description}</p>
       </div>
     </div>
   )

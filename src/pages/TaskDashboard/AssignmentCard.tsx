@@ -9,7 +9,7 @@ export default function AssignmentCard({ assignment }: { assignment: Assignment 
   const navigate = useNavigate()
 
   return (
-    <Card onClick={() => navigate(`/assignments/${assignment._id}`)} className="cursor-pointer rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
+    <Card onClick={() => navigate(`/assignments/${assignment._id}`)} className="cursor-pointer rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 bg-gradient-to-br from-white/65 via-white/75 to-white">
       
       <CardHeader className="space-y-1 pb-2">
         <CardTitle className="text-4xl font-semibold text-primary">
@@ -40,7 +40,7 @@ export default function AssignmentCard({ assignment }: { assignment: Assignment 
 
 export function AssignmentCardSkeleton() {
   return (
-    <Card className="rounded-2xl shadow-md">
+    <Card className="rounded-2xl shadow-md ">
       <CardHeader className="space-y-1 pb-2">
         <Skeleton className="h-8 w-40" /> {/* title */}
       </CardHeader>
