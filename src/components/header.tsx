@@ -21,7 +21,7 @@ export default function Header() {
     },
     {
       title: "create task",
-      url: "/tasks"
+      url: "/assignments"
     },
     {
       title: "profile",
