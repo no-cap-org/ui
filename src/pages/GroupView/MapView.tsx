@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { LatLng, LatLngExpression, Map, icon } from 'leaflet';
+import { Icon, LatLng, LatLngExpression, Map, icon } from 'leaflet';
 import { ref, onValue, set } from 'firebase/database';
 import { FirebaseService } from '@/lib/firebase/FirebaseService';
 import { User } from '.';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const userIcon = icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+const getIcon = (url: string | undefined) => icon({
+  iconUrl: url || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
   iconSize: [30, 30],
   iconAnchor: [15, 30],
+  className: "rounded-2xl"
 });
 
 const db = FirebaseService.getInstance().getRealtimeDB();
@@ -18,19 +19,18 @@ interface MemberLocation {
   userId: string;
   lat: number;
   lng: number;
+  icon?: Icon;
 }
 
-export default function MapView({
-  groupId,
-  userId,
-  memberDetails,
-  selectedMember
-}: {
+interface PropsI{
   groupId: string;
   userId: string;
   memberDetails: User[];
   selectedMember: string | null;
-}) {
+}
+
+
+export default function MapView({ groupId, userId, memberDetails, selectedMember }: PropsI) {
   const [members, setMembers] = useState<Record<string, MemberLocation>>({});
   const [defaultLocation, setDefaultLocation] = useState<LatLngExpression | null>(null);
   const mapRef = useRef<Map>(null);
@@ -57,7 +57,7 @@ export default function MapView({
       const val = snapshot.val() || {};
       const locationMap: Record<string, MemberLocation> = {};
       Object.entries(val).forEach(([uid, loc]: any) => {
-        locationMap[uid] = { userId: uid, lat: loc.lat, lng: loc.lng };
+        locationMap[uid] = { userId: uid, lat: loc.lat, lng: loc.lng, icon: getIcon(memberDetails.find( m => m._id == uid )?.profilePic) };
       });
       setMembers((prev) => ({
         ...prev,
@@ -106,7 +106,11 @@ export default function MapView({
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.3 }}
             >
-              <Marker key={member.userId} position={[member.lat, member.lng]} icon={userIcon}>
+              <Marker 
+                key={member.userId} 
+                position={[member.lat, member.lng]} 
+                icon={member.icon}
+              >
                 <Popup>
                   {member.userId === userId
                     ? 'You'
