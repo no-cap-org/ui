@@ -15,6 +15,7 @@ export type User = {
   lastName: string;
   phoneNo: string;
   dob: Date;
+  profilePic: string;
   createdAt: Date;
   updatedAt: Date;
 };

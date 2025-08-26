@@ -2,7 +2,8 @@ export const ENDPOINTS = {
   user: {
     signup: "/user/sign-up",
     login: "/user/login",
-    logout: "/user/logout"
+    logout: "/user/logout",
+    update: (userId: string) => `/user/${userId}/update`
   },
   session: {
     userSessionInfo: "/session/user-info"

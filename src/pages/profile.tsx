@@ -17,19 +17,22 @@ import { Input } from "@/components/ui/input";
 import { DatePicker } from "@/components/datepicker";
 import { toast } from "sonner";
 import { useSession } from "@/providers/SessionProvider";
+import LoadingStickMan from "@/assets/StickManWalking.gif";
+import { API } from "@/api";
 
-// ✅ Validation Schema
 const ProfileSchema = z.object({
-  firstName: z.string({ required_error: "First name is required" }),
-  lastName: z.string({ required_error: "Last name is required" }),
-  phoneNo: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
-  dob: z.date({ required_error: "Date of Birth is required" }).max(new Date(), { message: "Date cannot be in the future" }),
+  firstName: z.string({ required_error: "First name is required" }).optional(),
+  lastName: z.string({ required_error: "Last name is required" }).optional(),
+  phoneNo: z.string().min(10, { message: "Phone number must be at least 10 digits" }).optional(),
+  dob: z.date({ required_error: "Date of Birth is required" }).max(new Date(), { message: "Date cannot be in the future" }).optional(),
+  profilePic: z.string().url({ message: "Profile picture must be a valid URL" }).optional()
 });
 
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
-  const { user } = useSession()
+  const [loading, setLoading] = useState(false);
+  const { user, userId } = useSession()
 
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
@@ -38,19 +41,47 @@ export default function ProfilePage() {
       lastName: user?.lastName,
       dob: new Date(user?.dob || new Date().toISOString()) ,
       phoneNo: user?.phoneNo,
+      profilePic: user?.profilePic,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof ProfileSchema>) => {
     try {
-      // TODO: Replace with API call
-      console.log("Profile Updated:", values);
-      toast.success("Profile updated successfully!");
+      setLoading(true);
+      await API.METHODS.PUT(
+        API.ENDPOINTS.user.update(userId), 
+        { 
+          ...values,
+          profilePic: values.profilePic || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+        }, 
+        { withCredentials: true },
+        {
+          onSuccess: (data) => {
+            toast.success("Profile updated successfully")
+          },
+          onError: (error) => {
+            toast.error("Profile update failed", error.message)
+          }
+
+        }
+      )
+      
       setIsEditing(false);
     } catch (error) {
       toast.error("Failed to update profile");
     }
+    finally {
+      setLoading(false);
+    }
   };
+
+  if(!user || loading) {
+    return(
+      <div className="flex justify-center items-center">
+        <img src={LoadingStickMan} className="size-12" />
+      </div>
+    )
+  }
 
   return (
     <div className="flex justify-center pt-6 sm:pt-0 px-4 sm:px-6 lg:px-8">
@@ -72,13 +103,24 @@ export default function ProfilePage() {
                 className="flex flex-col gap-4"
                 onSubmit={form.handleSubmit(onSubmit)}
               >
-                {/* Email (always read-only) */}
+                <FormField control={form.control} name="profilePic" render={({ field }) => (
+                  <FormItem>
+                    <img src={field.value || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="Profile Preview" className="w-16 h-16 rounded-full" />
+                    <FormLabel>Profile Picture</FormLabel>
+                    {
+                      isEditing && 
+                      <FormControl>
+                        <Input placeholder="Maybe a stick man figure...." {...field} />
+                      </FormControl>
+                    }
+                    <FormMessage />
+                  </FormItem>
+                )} />
                 <div>
                   <FormLabel>Email</FormLabel>
                   <p className="text-muted-foreground rounded-md py-2">{user?.email}</p>
                 </div>
 
-                {/* Editable Fields */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -137,7 +179,7 @@ export default function ProfilePage() {
                         </FormControl>
                       ) : (
                         <p className="text-muted-foreground rounded-md py-2">
-                          {field.value.toLocaleDateString()}
+                          {field.value?.toLocaleDateString()}
                         </p>
                       )}
                       <FormMessage />
@@ -165,7 +207,6 @@ export default function ProfilePage() {
                   )}
                 />
 
-                {/* Buttons */}
                 <div className="flex justify-end gap-3 pt-4">
                   {isEditing ? (
                     <>
@@ -180,7 +221,11 @@ export default function ProfilePage() {
                         Cancel
                       </Button>
                       <motion.div whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.02 }}>
-                        <Button type="submit" variant="outline" className="font-semibold">
+                        <Button 
+                          type="submit" 
+                          variant="outline" 
+                          className="font-semibold"
+                        >
                           Save
                         </Button>
                       </motion.div>

@@ -20,7 +20,7 @@ import { z } from "zod";
 import { DatePicker } from "@/components/datepicker";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import LoadingStickMan from "@/assets/StickMan Walking.gif";
+import LoadingStickMan from "@/assets/StickManWalking.gif";
 
 
 const FormSchema = z.object({
@@ -29,7 +29,8 @@ const FormSchema = z.object({
   firstName: z.string({ required_error: "First name is required" }),
   lastName: z.string({ required_error: "Last name is required" }),
   dob: z.date({ required_error: "Date of Birth is required" }).max(new Date(), { message: "Date cannot be in the future" }),
-  phoneNo: z.string({ required_error: "Phone number is required" }).min(10, { message: "Phone number must be at least 10 digits" })
+  phoneNo: z.string({ required_error: "Phone number is required" }).min(10, { message: "Phone number must be at least 10 digits" }),
+  profilePic: z.string().url({ message: "Profile picture must be a valid URL" }).optional()
 });
 
 export default function SignUp() {
@@ -43,7 +44,7 @@ export default function SignUp() {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { email: "", password: "", firstName: "", lastName: "", dob: new Date(), phoneNo: "" }
+    defaultValues: { email: "", password: "", firstName: "", lastName: "", dob: new Date(), phoneNo: "", profilePic: "" }
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
@@ -62,7 +63,11 @@ export default function SignUp() {
 
       await API.METHODS.POST(
         API.ENDPOINTS.user.signup,
-        { token: await user.getIdToken(), ...values },
+        { 
+          token: await user.getIdToken(), 
+          ...values, 
+          profilePic: values.profilePic || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" 
+        },
         { withCredentials: true },
         {
           onSuccess: (message) => {
@@ -103,6 +108,14 @@ export default function SignUp() {
           <CardContent>
             <Form {...form}>
               <form className="flex flex-col gap-4 sm:gap-5" onSubmit={form.handleSubmit(onSubmit)}>
+                <FormField control={form.control} name="profilePic" render={({ field }) => (
+                  <FormItem>
+                    <img src={field.value || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="Profile Preview" className="w-16 h-16 rounded-full" />
+                    <FormLabel>Profile Picture</FormLabel>
+                    <FormControl><Input placeholder="Maybe a stick man figure...." {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField control={form.control} name="firstName" render={({ field }) => (
                     <FormItem>
