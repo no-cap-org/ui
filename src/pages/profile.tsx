@@ -57,7 +57,7 @@ export default function ProfilePage() {
         { withCredentials: true },
         {
           onSuccess: (data) => {
-            toast.success("Profile updated successfully")
+            toast.success("Profile updated successfully", data.message)
           },
           onError: (error) => {
             toast.error("Profile update failed", error.message)
