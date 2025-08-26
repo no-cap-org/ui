@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { LatLngExpression, icon } from 'leaflet';
+import { LatLng, LatLngExpression, Map, icon } from 'leaflet';
 import { ref, onValue, set } from 'firebase/database';
 import { FirebaseService } from '@/lib/firebase/FirebaseService';
 import { User } from '.';
@@ -24,13 +24,16 @@ export default function MapView({
   groupId,
   userId,
   memberDetails,
+  selectedMember
 }: {
   groupId: string;
   userId: string;
   memberDetails: User[];
+  selectedMember: string | null;
 }) {
   const [members, setMembers] = useState<Record<string, MemberLocation>>({});
   const [defaultLocation, setDefaultLocation] = useState<LatLngExpression | null>(null);
+  const mapRef = useRef<Map>(null);
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -68,6 +71,16 @@ export default function MapView({
     };
   }, [groupId, userId]);
 
+  useEffect(() => {
+    if(selectedMember){
+      const member = members[selectedMember]
+      if(member){
+        mapRef.current?.flyTo(new LatLng(member.lat, member.lng))
+      }
+
+    }
+  }, [selectedMember])
+
   if (!defaultLocation) return <p>Loading map...</p>;
 
   return (
@@ -78,7 +91,7 @@ export default function MapView({
       transition={{ duration: 0.6 }}
       style={{ height: '100%', width: '100%' }}
     >
-      <MapContainer center={defaultLocation} zoom={13} style={{ height: '100%', width: '100%' }}>
+      <MapContainer ref={mapRef} center={defaultLocation} zoom={13} style={{ height: '100%', width: '100%' }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"

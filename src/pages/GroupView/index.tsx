@@ -30,6 +30,7 @@ export default function GroupView() {
   const { userId } = useSession();
   const [groupData, setGroupData] = useState<GroupData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedMember,setSelectedMember] = useState<string | null>(null);
 
   useEffect(() => {
     if (!groupId) return;
@@ -110,10 +111,11 @@ export default function GroupView() {
                 {groupData.memberDetails.map((member, index) => (
                   <motion.div
                     key={member._id}
-                    className="flex items-center gap-4 border p-4 rounded-xl shadow-sm"
+                    className="cursor-pointer flex items-center gap-4 border p-4 rounded-xl shadow-sm hover:bg-white/40"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 + index * 0.05 }}
+                    onClick={() => setSelectedMember(member._id)}
                   >
                     <Avatar>
                       <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${member.firstName}`} />
@@ -147,7 +149,7 @@ export default function GroupView() {
             </CardHeader>
             <CardContent>
               <div className="w-full h-[380px] bg-muted rounded-xl flex items-center justify-center">
-                <MapView groupId={groupId} userId={userId} memberDetails={groupData.memberDetails} />
+                <MapView groupId={groupId} userId={userId} memberDetails={groupData.memberDetails} selectedMember={selectedMember} />
               </div>
             </CardContent>
           </Card>
