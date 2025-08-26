@@ -16,7 +16,7 @@ export function DatePicker({ onDateSelect, value }: DatePickerProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="flex flex-col gap-3 bg-white">
+    <div className="flex flex-col gap-3">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button

@@ -14,6 +14,21 @@ export default function Header() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const links = [
+    {
+      title: "create group",
+      url: "/groups"
+    },
+    {
+      title: "create task",
+      url: "/tasks"
+    },
+    {
+      title: "profile",
+      url: "/profile"
+    }
+  ]
+
   const logoutUser = async () => {
     await API.METHODS.POST(
       API.ENDPOINTS.user.logout,
@@ -56,7 +71,7 @@ export default function Header() {
             visible: { transition: { staggerChildren: 0.15 } },
           }}
         >
-          {["/groups", "/assignments"].map((path, index) => (
+          {links.map((link, index) => (
             <motion.div
               key={index}
               variants={{
@@ -64,8 +79,8 @@ export default function Header() {
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              <Link to={path} className="text-foreground hover:text-primary">
-                {path.includes("groups") ? "Create Group" : "Create Task"}
+              <Link to={link.url} className="text-foreground hover:text-primary">
+                {link.title}
               </Link>
             </motion.div>
           ))}
@@ -83,7 +98,7 @@ export default function Header() {
                 variant="outline"
                 onClick={logoutUser}
               >
-                Logout
+                logout
               </Button>
             ) : (
               <>
@@ -92,13 +107,13 @@ export default function Header() {
                   className="text-black hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer"  
                   variant="outline"
                 >
-                  <Link to="/sign-up">Sign Up</Link>
+                  <Link to="/sign-up">sign up</Link>
                 </Button>
                 <Button 
                   asChild 
                   className="text-black hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-pointer" 
                   variant="outline">
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">login</Link>
                 </Button>
               </>
             )}
@@ -127,14 +142,14 @@ export default function Header() {
           >
             <div className="flex flex-col space-y-4 px-4 py-4">
               {/* Center nav links */}
-              {["/groups", "/assignments"].map((path, index) => (
+              {links.map((link, index) => (
                 <Link
                   key={index}
-                  to={path}
+                  to={link.url}
                   className="text-foreground hover:text-primary"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {path.includes("groups") ? "Create Group" : "Create Task"}
+                  {link.title}
                 </Link>
               ))}
 
@@ -150,7 +165,7 @@ export default function Header() {
                     setMobileMenuOpen(false);
                   }}
                 >
-                  Logout
+                  logout
                 </Button>
               ) : (
                 <>
@@ -164,7 +179,7 @@ export default function Header() {
                         setMobileMenuOpen(false)
                       }}
                     >
-                      Sign Up
+                      sign up
                     </Button>
                     <Button
                       variant="outline"
@@ -174,7 +189,7 @@ export default function Header() {
                         setMobileMenuOpen(false)
                       }}
                     >
-                      Login
+                      login
                     </Button>
                   </div>
                 </>

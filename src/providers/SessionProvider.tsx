@@ -1,7 +1,9 @@
 import { API } from "@/api";
+import { User } from "@/pages/GroupView";
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 
 type ISessionContext = {
+  user: User | null
   userId: string
   email: string
   sessionId: string
@@ -14,6 +16,7 @@ type ISessionContext = {
 }
 
 const defaultValues: ISessionContext = {
+  user: null,
   userId: "",
   email: "",
   sessionId: "",
@@ -28,12 +31,13 @@ const SessionContext = createContext<ISessionContext>(defaultValues);
 
 function SessionProvider({children}: PropsWithChildren){
 
+  const [user, setUser] = useState<User | null>(null);
   const [userId, setUserId] = useState<string>(""); 
   const [email, setEmail] = useState<string>("");
   const [sessionId, setSessionId] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(true)
   // console.log(email)
-  // console.log(userId)
+  console.log(user)
   // console.log(sessionId)
   const clearSession = () => { 
     setSessionId("");
@@ -51,7 +55,18 @@ function SessionProvider({children}: PropsWithChildren){
           { withCredentials: true }, // options
           {
             onSuccess: (data: ISessionContext) => {
-              setUserId(data.userId);
+              if (data.user) {
+                setUserId(data.user._id);
+                setUser({
+                  ...data.user,
+                  dob: new Date(data.user.dob),
+                  createdAt: new Date(data.user.createdAt),
+                  updatedAt: new Date(data.user.updatedAt),
+                });
+              } else {
+                setUser(null);
+                setUserId("");
+              }
               setEmail(data.email);
               setSessionId(data.sessionId);
             },
@@ -75,7 +90,7 @@ function SessionProvider({children}: PropsWithChildren){
 
   return (
     <>
-      <SessionContext.Provider value={{userId, email, sessionId, isLoading, clearSession, setEmail, setSessionId, setUserId}} >
+      <SessionContext.Provider value={{userId,user, email, sessionId, isLoading, clearSession, setEmail, setSessionId, setUserId }} >
         {children}
       </SessionContext.Provider>
     </>

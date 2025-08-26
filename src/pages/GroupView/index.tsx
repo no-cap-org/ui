@@ -14,6 +14,9 @@ export type User = {
   firstName: string;
   lastName: string;
   phoneNo: string;
+  dob: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 type GroupData = {
