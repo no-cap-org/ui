@@ -319,7 +319,7 @@ export function GroupTableSkeleton() {
             <Skeleton className="h-20 w-full bg-white/30  backdrop-blur-md shadow-md " />
           </TableHeader>
           <TableBody className="flex flex-col gap-y-2">
-            {Array.from({ length: 3 }).map((_, i) => (
+            {Array.from({ length: 3 }).map((_) => (
               <Skeleton className="h-20 w-full bg-white/30  backdrop-blur-md shadow-md" />
             ))}
           </TableBody>
