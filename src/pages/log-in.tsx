@@ -26,7 +26,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { z } from "zod";
 import { motion } from "framer-motion";
-import LoadingStickMan from "@/assets/StickMan Walking.gif";
+import LoadingStickMan from "@/assets/StickManWalking.gif";
 
 const FormSchema = z.object({
   email: z.string({ required_error: "Email is required" }).email("Invalid email address"),

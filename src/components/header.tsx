@@ -6,7 +6,7 @@ import Logo from "./logo";
 import { useSession } from "@/providers/SessionProvider";
 import { API } from "@/api";
 import { motion, AnimatePresence } from "framer-motion";
-import LoadingStickMan from "@/assets/StickMan Walking.gif";
+import LoadingStickMan from "@/assets/StickManWalking.gif";
 
 export default function Header() {
   const { email, clearSession, isLoading } = useSession();

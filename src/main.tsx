@@ -43,6 +43,6 @@ createRoot(document.getElementById('root')!).render(
         </BrowserRouter>
       </ThemeProvider>
     </SessionProvider>
-    <Toaster toastOptions={{duration: 1500}} richColors/>
+    <Toaster toastOptions={{duration: 3000}} richColors/>
   </>
 )

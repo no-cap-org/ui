@@ -1,6 +1,6 @@
 import { useSession } from "@/providers/SessionProvider";
 import { Navigate, Outlet, useLocation } from "react-router";
-import LoadingStickMan from "@/assets/StickMan Walking.gif";
+import LoadingStickMan from "@/assets/StickManWalking.gif";
 
 export default function AuthenticatedLayout(){
 
