@@ -3,7 +3,7 @@ import { useSession } from "@/providers/SessionProvider";
 import { toast } from "sonner";
 import { useCallback, useEffect, useState } from "react";
 import { CreateGroupPopup } from "./CreateGroupPopup";
-import { GroupTable, GroupTableSkeleton } from "./group-view/GroupTable";
+import { GroupTable } from "./group-view/GroupTable";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function GroupDashboard() {
