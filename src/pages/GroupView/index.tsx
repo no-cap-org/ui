@@ -81,14 +81,15 @@ export default function GroupView() {
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.4 }}
         >
-          <Card>
+          <Card className='bg-gradient-to-b from-indigo-200/40 shadow-lg'>
             <CardHeader>
               <CardTitle>{groupData.name}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-2">{groupData.description}</p>
               <div className="text-sm">
-                <span className="font-semibold">Owner:</span> {groupData.ownerDetails.firstName} {groupData.ownerDetails.lastName} ({groupData.ownerDetails.email})
+                <div className="font-semibold">Owner: {groupData.ownerDetails.firstName} {groupData.ownerDetails.lastName}</div> 
+                <div>Phone: {groupData.ownerDetails.phoneNo}</div>
               </div>
             </CardContent>
           </Card>
@@ -101,8 +102,9 @@ export default function GroupView() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.4, delay: 0.1 }}
+          
         >
-          <Card>
+          <Card className='bg-gradient-to-b from-purple-200/40 shadow-lg'>
             <CardHeader>
               <CardTitle>Members</CardTitle>
             </CardHeader>
@@ -111,7 +113,7 @@ export default function GroupView() {
                 {groupData.memberDetails.map((member, index) => (
                   <motion.div
                     key={member._id}
-                    className="cursor-pointer flex items-center gap-4 border p-4 rounded-xl shadow-sm hover:bg-white/40"
+                    className={`cursor-pointer flex items-center gap-4 border p-4 rounded-xl shadow-sm hover:bg-white/70 ${selectedMember == member._id ? "bg-white/70" : "bg-inherit"}`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 + index * 0.05 }}
@@ -143,7 +145,7 @@ export default function GroupView() {
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.4, delay: 0.2 }}
         >
-          <Card>
+          <Card className='bg-gradient-to-b from-green-200/20 to-blue-200/40 shadow-lg'>
             <CardHeader>
               <CardTitle>Member Locations</CardTitle>
             </CardHeader>
