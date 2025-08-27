@@ -34,6 +34,8 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const { user, userId } = useSession()
 
+  console.log(user)
+
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {

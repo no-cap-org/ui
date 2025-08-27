@@ -36,7 +36,7 @@ const FormSchema = z.object({
 export default function SignUp() {
   const firebaseAuthService = FirebaseAuthService.getInstance();
   const navigate = useNavigate();
-  const { email, setEmail, setSessionId, setUserId, isLoading: isSessionLoading } = useSession();
+  const { email, setEmail, setSessionId, setUserId, setUser , isLoading: isSessionLoading } = useSession();
   const [loading, setLoading] = useState<boolean>(false || isSessionLoading);
 
   useEffect(() => { setLoading(isSessionLoading); }, [isSessionLoading]);
@@ -74,6 +74,12 @@ export default function SignUp() {
             toast.success("Account created successfully!");
             setEmail(message.email);
             setUserId(message.userId);
+            setUser({
+              ...message.user,
+              dob: new Date(message.user.dob),
+              createdAt: new Date(message.user.createdAt),
+              updatedAt: new Date(message.user.updatedAt),
+            });
             setSessionId(message.sessionId); 
             navigate("/groups");
           },

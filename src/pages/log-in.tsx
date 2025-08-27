@@ -35,7 +35,7 @@ const FormSchema = z.object({
 
 export default function Login() {
   const firebaseAuthService = FirebaseAuthService.getInstance();
-  const { setSessionId, setUserId, setEmail } = useSession();
+  const { setSessionId, setUserId, setEmail, setUser } = useSession();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -70,6 +70,12 @@ export default function Login() {
             toast.success("Logged in successfully", { description: message.email });
             setEmail(message.email);
             setSessionId(message.sessionId);
+            setUser({
+              ...message.user,
+              dob: new Date(message.user.dob),
+              createdAt: new Date(message.user.createdAt),
+              updatedAt: new Date(message.user.updatedAt),
+            });
             setUserId(message.userId);
             navigate(location.state?.from || "/groups");
           },

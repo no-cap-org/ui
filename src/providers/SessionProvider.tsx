@@ -12,6 +12,8 @@ type ISessionContext = {
   setEmail: React.Dispatch<React.SetStateAction<string>>
   setUserId: React.Dispatch<React.SetStateAction<string>>
   setSessionId: React.Dispatch<React.SetStateAction<string>>
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
+
 }
 
 const defaultValues: ISessionContext = {
@@ -24,6 +26,7 @@ const defaultValues: ISessionContext = {
   setEmail: () => {},
   setUserId: () => {},
   setSessionId: () => {},
+  setUser: () => {},
 }
 
 const SessionContext = createContext<ISessionContext>(defaultValues);
@@ -91,6 +94,7 @@ function SessionProvider({ children }: PropsWithChildren) {
         setEmail,
         setSessionId,
         setUserId,
+        setUser
       }}
     >
       {children}
