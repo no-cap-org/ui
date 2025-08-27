@@ -7,6 +7,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import MapView from './MapView';
 import { useSession } from '@/providers/SessionProvider';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MessagesSquare } from 'lucide-react';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import GroupChat from './Chat';
 
 export type User = {
   _id: string;
@@ -161,6 +164,39 @@ export default function GroupView() {
           </Card>
         </motion.div>
       </AnimatePresence>
+      <Sheet>
+        {/* Floating Chat Button */}
+        <div className="fixed bottom-5 right-6 z-50">
+          <SheetTrigger asChild>
+            <button
+              className="
+                flex items-center gap-2 rounded-full shadow-lg 
+                bg-indigo-500 text-white 
+                hover:bg-indigo-600 transition 
+                p-3 md:p-4
+              "
+            >
+              <MessagesSquare className="size-6 md:size-8" />
+              {/* Show text only on md+ screens */}
+              <span className="hidden md:inline font-medium">Chat</span>
+            </button>
+          </SheetTrigger>
+        </div>
+
+        {/* Chat Drawer */}
+        <SheetContent
+          side="left"
+          className="bg-white flex flex-col h-full w-full sm:w-[400px]"
+        >
+          <SheetHeader>
+            <SheetTitle>{groupData.name}</SheetTitle>
+            <SheetDescription>Group Chat</SheetDescription>
+          </SheetHeader>
+          <div className="flex-1 h-screen overflow-y-auto">
+            <GroupChat groupId={groupId!} />
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
