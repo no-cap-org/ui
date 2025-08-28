@@ -24,7 +24,7 @@ export default function AssignUserPopover({ assignmentId, onTaskAssigned }: { as
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm">Assign User</Button>
+        <Button className="cursor-pointer hover:bg-gray-900 hover:text-white" variant="outline" size="sm">Assign User</Button>
       </PopoverTrigger>
       <PopoverContent className=" bg-white w-80">
         <div className="flex flex-col space-y-3">

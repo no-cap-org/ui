@@ -7,9 +7,10 @@ import { useSession } from "@/providers/SessionProvider";
 import { API } from "@/api";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingStickMan from "@/assets/StickManWalking.gif";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 
 export default function Header() {
-  const { email, clearSession, isLoading } = useSession();
+  const { email, clearSession, isLoading, user } = useSession();
   const isSessionActive = !!email;
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -84,6 +85,9 @@ export default function Header() {
               </Link>
             </motion.div>
           ))}
+          <Avatar>
+            <AvatarImage src={user?.profilePic} className="rounded-full size-6" />
+          </Avatar>
         </motion.nav>
 
         {/* Right (User Actions Desktop + Mobile Menu Button) */}

@@ -18,7 +18,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen px-4 sm:px-6 lg:px-12 xl:px-20 py-16 space-y-28 bg-gradient-to-b text-gray-800">
+    <div className="min-h-screen px-4 sm:px-6 lg:px-12 xl:px-20 py-8 space-y-28 bg-gradient-to-b text-gray-800">
 
       {/* Hero Section */}
       <motion.div
@@ -27,7 +27,8 @@ export default function LandingPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-800">
+        <h1 className="text-3xl sm:text-4xl lg:text-7xl font-extrabold tracking-tight text-gray-800">origin-ally</h1>
+        <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-gray-800">
           <TypeWriter
             options={{
               strings: "Stay Connected, Live.",
@@ -37,9 +38,9 @@ export default function LandingPage() {
             }}
           />
         </h1>
-        <p className="text-base sm:text-lg lg:text-xl max-w-2xl mx-auto text-gray-800/80">
+        {/* <p className="text-base sm:text-lg lg:text-xl max-w-2xl mx-auto text-gray-800/80">
           Real-time location sharing with ultra-low latency. Manage teams, coordinate deliveries, or keep friends in sync — all effortlessly.
-        </p>
+        </p> */}
       </motion.div>
 
       {/* Group Live Location */}
